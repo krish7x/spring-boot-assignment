@@ -22,8 +22,7 @@ public class MainApplication  {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
 
-        FileWriter writer = new FileWriter("K:/Work/Clayfin/WIPRO_23614.csv");
-
+        FileWriter writer = new FileWriter(file3);
 
         // Creating a Workbook from an Excel file (.xls or .xlsx)
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
@@ -42,7 +41,6 @@ public class MainApplication  {
 
             //iterate over the columns of the current row
             Iterator<Cell> cellIterator = row.cellIterator();
-
 
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
@@ -65,14 +63,10 @@ public class MainApplication  {
 
         for(String ans: sub_list)
             System.out.print(ans);
-
-//        String collect = sub_list.stream().collect(Collectors.joining(","));
-//        System.out.println(collect);
+        //System.out.println("\n" + "Data --> "+sub_list.get(0));
 
         writer.write(sub_list.stream().collect(Collectors.joining()));
         writer.close();
-
-//        System.out.println("\n" + "Data --> "+sub_list.get(0));
 
         //----------------------
         //gives file name
