@@ -44,5 +44,5 @@ public class Bank {
     public void setAmount(String amount) {this.amount = amount;}
 
     public String getPayment_type() {return payment_type;}
-    private void setPayment_type(String payment_type) {this.payment_type = payment_type;}
+    public void setPayment_type(String payment_type) {this.payment_type = payment_type;}
 }

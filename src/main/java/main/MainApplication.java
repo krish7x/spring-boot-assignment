@@ -11,7 +11,12 @@ import java.util.stream.Collectors;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
 public class MainApplication  {
+
+
 
     //file imports
     private static final String FILE_NAME = Constants.file1;
@@ -22,13 +27,26 @@ public class MainApplication  {
     //list for csv file
     public static  List<String> result = new ArrayList<String>();
 
+    //Array List
+    public static ArrayList<String>str = new ArrayList<String>();
+    public static ArrayList<String>sl_no = new ArrayList<String>();
+    public static ArrayList<String>payment_date = new ArrayList<String>();
+    public static ArrayList<String>from_account = new ArrayList<String>();
+    public static ArrayList<String>to_account = new ArrayList<String>();
+    public static ArrayList<String>amount = new ArrayList<String>();
+    public static ArrayList<String>payment_type = new ArrayList<String>();
+
+
     //for looping through the payment_details
     public static  HashMap<String, HashMap> payment_details = new HashMap<String, HashMap>();
+
+    public static HashMap userDetails;
 
     // Creating payment details of all individuals and headerTabs
     public static List<String> headerTabs = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
+        SpringApplication.run(MainApplication.class, args);
 
         // Creating a Workbook from an Excel file (.xls or .xlsx)
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
@@ -42,8 +60,6 @@ public class MainApplication  {
         //Obtaining a rowIterator and columnIterator and iterate over them
         System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
         Iterator<Row> rowIterator = sheet.rowIterator();
-
-
 
 
         // Variable to denote first iteration to fetch header Tabs
@@ -68,6 +84,7 @@ public class MainApplication  {
                 Cell cell = cellIterator.next();
                 String cellValue = dataFormatter.formatCellValue(cell);
                 System.out.print(cellValue + "\t");
+                str.add(cellValue);
                 result.add(cellValue + ",");
                 if (firstInitiative) { // used to fetch the header cells
                     headerTabs.add(cellValue);
@@ -89,10 +106,15 @@ public class MainApplication  {
 
         //printing the list
         for(String id: payment_details.keySet()) {
-            HashMap userDetails;
             userDetails = payment_details.get(id);
-            System.out.println(userDetails);
+            sl_no.add(userDetails.get("sl no").toString());
+            payment_date.add(userDetails.get("payment_date").toString());
+            from_account.add(userDetails.get("from_account").toString());
+            to_account.add(userDetails.get("to_account").toString());
+            amount.add(userDetails.get("amount").toString());
+            payment_type.add(userDetails.get("payment_date").toString());
         }
+
 
         List<String>sub_list = result.subList(6,result.size());
 
@@ -124,6 +146,11 @@ public class MainApplication  {
         System.out.println("Corporate Name --> "+ corp_name);
 
         //----------------------
+
+//        for(String i: str) {
+//            System.out.print(i);
+//        }
+        System.out.println(str.get(10));
 
         BankController obj = new BankController();
         obj.addDetails();
