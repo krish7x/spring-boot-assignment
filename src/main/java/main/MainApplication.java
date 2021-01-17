@@ -13,14 +13,22 @@ import org.apache.poi.ss.usermodel.*;
 
 public class MainApplication  {
 
+    //file imports
     private static final String FILE_NAME = Constants.file1;
+    public static final String FILE_NAME1 = Constants.file3;
+
     public static  String corp_name;
+
+    //list for csv file
     public static  List<String> result = new ArrayList<String>();
-    public static final String file3 = Constants.file3;
+
+    //for looping through the payment_details
+    public static  HashMap<String, HashMap> payment_details = new HashMap<String, HashMap>();
+
+    // Creating payment details of all individuals and headerTabs
+    public static List<String> headerTabs = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-
-        FileWriter writer = new FileWriter(file3);
 
         // Creating a Workbook from an Excel file (.xls or .xlsx)
         Workbook workbook = WorkbookFactory.create(new File(FILE_NAME));
@@ -35,9 +43,8 @@ public class MainApplication  {
         System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
         Iterator<Row> rowIterator = sheet.rowIterator();
 
-        // Creating payment details of all individuals and headerTabs
-        List<String> headerTabs = new ArrayList<String>();
-        HashMap<String, HashMap> payment_details = new HashMap<String, HashMap>();
+
+
 
         // Variable to denote first iteration to fetch header Tabs
         Boolean firstInitiative = true;
@@ -75,29 +82,38 @@ public class MainApplication  {
             firstInitiative = false;
             payment_details.put(userId,personPaymentDetails); // mapping individual hashmap to overall hashmap
             System.out.println();
+            
         }
 
+        System.out.println("\n\nDetails stored in hash map as key,value pairs\n");
+
         //printing the list
-        for(String userId: payment_details.keySet()) {
-            HashMap userDetails = payment_details.get(userId);
+        for(String id: payment_details.keySet()) {
+            HashMap userDetails;
+            userDetails = payment_details.get(id);
             System.out.println(userDetails);
         }
 
         List<String>sub_list = result.subList(6,result.size());
-        //sub_list.remove(sub_list.size() - 1);
 
+        System.out.println("\n\nDetails stored in list as comma seperated values\n");
         for(String ans: sub_list)
             System.out.print(ans);
         //System.out.println("\n" + "Data --> "+sub_list.get(0));
 
+        //CSV Writer
+        FileWriter writer = new FileWriter(FILE_NAME1);
+
         writer.write(sub_list.stream().collect(Collectors.joining()));
         writer.close();
 
+        System.out.println("\n\nFile name and corporate name\n");
+
         //----------------------
         //gives file name
-        String corp_file = charRemoveAt(FILE_NAME, 24);
+        String corp_file = charRemoveAt(FILE_NAME, 15);
 
-        System.out.println("\n" + "\n" + "File Name --> " +corp_file);
+        System.out.println("File Name --> " +corp_file);
 
         //To grab the corporate name
         int name_end = corp_file.indexOf("_");
@@ -109,13 +125,14 @@ public class MainApplication  {
 
         //----------------------
 
+        BankController obj = new BankController();
+        obj.addDetails();
+
     }
 
     //function to eliminate the path --> gives file name
     public static String charRemoveAt(String str, int p) {
         return  str.substring(p + 1);
     }
-
-
 
 }
